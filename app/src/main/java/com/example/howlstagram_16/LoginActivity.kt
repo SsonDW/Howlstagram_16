@@ -3,13 +3,11 @@ package com.example.howlstagram_16
 import android.content.Intent
 
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-//import kotlinx.androidx.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
     var auth : FirebaseAuth? = null
@@ -17,15 +15,12 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         auth = FirebaseAuth.getInstance()
-        val email_login_button: Button = findViewById(R.id.email_login_button)
         email_login_button.setOnClickListener {
             signinAndSignup()
         }
     }
 
     fun signinAndSignup(){
-        val email_edittext: EditText = findViewById(R.id.email_edittext)
-        val password_edittext: EditText = findViewById(R.id.password_edittext)
         auth?.createUserWithEmailAndPassword(email_edittext.text.toString(), password_edittext.text.toString())
             ?.addOnCompleteListener {
                     task ->
@@ -43,8 +38,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun signinEmail(){
-        val email_edittext: EditText = findViewById(R.id.email_edittext)
-        val password_edittext: EditText = findViewById(R.id.password_edittext)
         auth?.signInWithEmailAndPassword(email_edittext.text.toString(),password_edittext.text.toString())
             ?.addOnCompleteListener {
                     task ->
