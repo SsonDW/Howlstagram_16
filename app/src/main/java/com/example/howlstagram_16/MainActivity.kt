@@ -5,7 +5,10 @@ import android.os.Bundle
 import android.view.MenuItem
 import com.google.android.material.navigation.NavigationBarView
 import kotlinx.android.synthetic.main.activity_main.*
+import navigation.AlarmFragment
 import navigation.DetailViewFragment
+import navigation.GridFragment
+import navigation.UserFragment
 
 class MainActivity : AppCompatActivity() , NavigationBarView.OnItemSelectedListener{
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,8 +25,8 @@ class MainActivity : AppCompatActivity() , NavigationBarView.OnItemSelectedListe
                return true
            }
            R.id.action_search->{
-               var gridFragmentFragment=DetailViewFragment()
-               supportFragmentManager.beginTransaction().replace(R.id.main_content,gridFragmentFragment).commit()
+               var gridFragment=GridFragment()
+               supportFragmentManager.beginTransaction().replace(R.id.main_content,gridFragment).commit()
                return true
            }
            R.id.action_add_photo->{
@@ -31,12 +34,12 @@ class MainActivity : AppCompatActivity() , NavigationBarView.OnItemSelectedListe
                return true
            }
            R.id.action_favorite_alarm->{
-               var alarmFragment=DetailViewFragment()
+               var alarmFragment=AlarmFragment()
                supportFragmentManager.beginTransaction().replace(R.id.main_content,alarmFragment).commit()
                return true
            }
            R.id.action_account->{
-               var userFragment=DetailViewFragment()
+               var userFragment=UserFragment()
                supportFragmentManager.beginTransaction().replace(R.id.main_content,userFragment).commit()
                return true
            }
