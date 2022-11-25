@@ -21,19 +21,18 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun signinAndSignup(){
-        auth?.createUserWithEmailAndPassword(email_edittext.text.toString(), password_edittext.text.toString())
-            ?.addOnCompleteListener {
+        auth?.createUserWithEmailAndPassword(email_edittext.text.toString(), password_edittext.text.toString())?.addOnCompleteListener {
                     task ->
-                if(task.isSuccessful){
-                    //Creating a user account
-                    moveMainPage(task.result?.user)
-                }else if(task.exception?.message.isNullOrEmpty()){
-                    //Show the error message
-                    Toast.makeText(this,task.exception?.message,Toast.LENGTH_LONG).show()
-                }else{
-                    //Login if you have account
-                    signinEmail()
-                }
+                        if(task.isSuccessful){
+                            //Creating a user account
+                            moveMainPage(task.result?.user)
+                        }else if(task.exception?.message.isNullOrEmpty()){
+                            //Show the error message
+                            Toast.makeText(this,task.exception?.message,Toast.LENGTH_LONG).show()
+                        }else{
+                            //Login if you have account
+                            signinEmail()
+                        }
             }
     }
 
@@ -41,13 +40,14 @@ class LoginActivity : AppCompatActivity() {
         auth?.signInWithEmailAndPassword(email_edittext.text.toString(),password_edittext.text.toString())
             ?.addOnCompleteListener {
                     task ->
-                if(task.isSuccessful){
-                    //Login
-                    moveMainPage(task.result?.user)
-                }else{
-                    //Show the error message
-                    Toast.makeText(this,task.exception?.message, Toast.LENGTH_LONG).show()
-                }
+                        if(task.isSuccessful){
+                            //Login
+                            moveMainPage(task.result?.user)
+                        }
+                        else{
+                            //Show the error message
+                            Toast.makeText(this,task.exception?.message, Toast.LENGTH_LONG).show()
+                        }
             }
     }
 
