@@ -95,14 +95,14 @@ class DetailViewFragment : Fragment() {
                 var contentDTO=transaction.get(tsDoc!!).toObject(ContentDTO::class.java)
 
                 if(contentDTO!!.favorites.containsKey(uid)){
-                    //좋아요가 눌려져있을때
+                    //좋아요가 눌려져 있을때
                     //좋아요 취소
                     contentDTO.favoriteCount = contentDTO.favoriteCount - 1 //좋아요 수 감소
                     contentDTO.favorites.remove(uid); //uid 제거
 
                 }
                 else{
-                    //좋아요가 안눌러져있을때
+                    //좋아요가 안눌러져 있을때
                     contentDTO.favoriteCount = contentDTO.favoriteCount + 1//좋아요 수 증가
                     contentDTO.favorites[uid!!] = true //uid 추가
                 }
