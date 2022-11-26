@@ -2,12 +2,14 @@ package com.example.howlstagram_16.navigation
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,8 +22,9 @@ import com.example.howlstagram_16.R
 import com.example.howlstagram_16.navigation.model.ContentDTO
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.howl.howlstagram_f16.navigation.model.FollowDTO
 import kotlinx.android.synthetic.main.activity_main.*
-import  kotlinx.android.synthetic.main.fragment_user.view.*
+import kotlinx.android.synthetic.main.fragment_user.view.*
 
 @Suppress("DEPRECATION")
 class UserFragment : Fragment() {
@@ -60,6 +63,9 @@ class UserFragment : Fragment() {
             mainActivity.toolbar_title_image?.visibility= View.GONE
             mainActivity.toolbar_username?.visibility=View.VISIBLE
             mainActivity.toolbar_btn_back?.visibility=View.VISIBLE
+            fragmentView?.account_btn_follow_signout?.setOnClickListener{
+                requestFollow()
+            }
         }
         fragmentView?.account_reyclerview?.adapter = UserFragmentRecyclerViewAdapter()
         fragmentView?.account_reyclerview?.layoutManager = GridLayoutManager(activity, 3)
@@ -70,17 +76,99 @@ class UserFragment : Fragment() {
             activity?.startActivityForResult(photoPickerIntent,PICK_PROFILE_FROM_ALBUM)
         }
         getProfileImage()
+        getFollowerAndFollowing()
         return fragmentView
     }
-    fun getProfileImage(){
-        firestore?.collection("profileImage")?.document(uid!!)?.addSnapshotListener{documentSnapshot,firebaseFirestoreException ->
-            if(documentSnapshot==null) return@addSnapshotListener
-            if(documentSnapshot.data != null){
-                var url = documentSnapshot?.data!!["image"]
-                Glide.with(requireActivity()).load(url).apply(RequestOptions().circleCrop()).into(fragmentView?.account_iv_profile!!)
 
+    @SuppressLint("UseRequireInsteadOfGet")
+    fun getFollowerAndFollowing(){
+        firestore?.collection("users")?.document(uid!!)?.addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
+            if(documentSnapshot == null) return@addSnapshotListener
+            var followDTO = documentSnapshot.toObject(FollowDTO::class.java)
+            if(followDTO?.followingCount != null){
+                fragmentView?.account_tv_following_count?.text = followDTO.followingCount.toString()
+            }
+            if(followDTO?.followerCount != null){
+                fragmentView?.account_tv_follower_count?.text = followDTO.followerCount.toString()
+                if(followDTO?.followers?.containsKey(currentUserUid!!) == true){
+                    fragmentView?.account_btn_follow_signout?.text = getString(R.string.follow_cancel)
+                    fragmentView?.account_btn_follow_signout?.background
+                        ?.setColorFilter(ContextCompat.getColor(activity!!,R.color.colorLightGray),
+                            PorterDuff.Mode.MULTIPLY)
+                }else{
+                    if(uid != currentUserUid){
+                        fragmentView?.account_btn_follow_signout?.text = getString(R.string.follow)
+                        fragmentView?.account_btn_follow_signout?.background?.colorFilter = null
+                    }
+
+                }
+            }
+        }
+    }
+
+    fun requestFollow() {
+        //Save data to my account
+        var tsDocFollowing = firestore?.collection("users")?.document(currentUserUid!!)
+        firestore?.runTransaction { transaction ->
+            var followDTO = transaction.get(tsDocFollowing!!).toObject(FollowDTO::class.java)
+            if(followDTO == null){
+                followDTO = FollowDTO()
+                followDTO.followingCount = 1
+                followDTO.followings[uid!!] = true
+
+                transaction.set(tsDocFollowing, followDTO)
+                return@runTransaction
             }
 
+            if(followDTO.followings.containsKey(uid)){
+                //It remove following third person when a third person follow me
+                followDTO.followingCount = followDTO.followingCount - 1
+                followDTO.followings.remove(uid)
+            }else{
+                //It add following third person when a third person do not follow me
+                followDTO.followingCount = followDTO.followingCount.plus(1)
+                followDTO.followings.set(uid!!, true)
+            }
+            transaction.set(tsDocFollowing,followDTO)
+            return@runTransaction
+        }
+        //Save data to third person
+        var tsDocFollower = firestore?.collection("users")?.document(uid!!)
+        firestore?.runTransaction { transaction ->
+            var followDTO = transaction.get(tsDocFollower!!).toObject(FollowDTO::class.java)
+            if(followDTO == null){
+                followDTO = FollowDTO()
+                followDTO!!.followerCount = 1
+                followDTO!!.followers[currentUserUid!!] = true
+
+                transaction.set(tsDocFollower,followDTO!!)
+                return@runTransaction
+            }
+
+            if(followDTO!!.followers.containsKey(currentUserUid!!)){
+                //It cancel my follower when I follow a third person
+                followDTO!!.followerCount = followDTO!!.followerCount - 1
+                followDTO!!.followers.remove(currentUserUid!!)
+            }else{
+                //It add my follower when I don't follow a third person
+                followDTO!!.followerCount = followDTO!!.followerCount + 1
+                followDTO!!.followers[currentUserUid!!] = true
+
+            }
+            transaction.set(tsDocFollower,followDTO!!)
+            return@runTransaction
+        }
+    }
+
+    @SuppressLint("UseRequireInsteadOfGet")
+    fun getProfileImage(){
+        firestore?.collection("profileImages")?.document(uid!!)?.addSnapshotListener{documentSnapshot, firebaseFirestoreException ->
+            if(documentSnapshot==null) return@addSnapshotListener
+            if(documentSnapshot.data != null){
+                var url = documentSnapshot.data!!["image"]
+                System.out.println("url = " + url)
+                Glide.with(activity!!).load(url).apply(RequestOptions().circleCrop()).into(fragmentView?.account_iv_profile!!)
+            }
         }
     }
     @SuppressLint("NotifyDataSetChanged")
