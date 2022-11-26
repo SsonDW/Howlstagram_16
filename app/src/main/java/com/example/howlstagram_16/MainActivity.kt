@@ -10,6 +10,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.howlstagram_16.navigation.*
 import com.google.android.material.navigation.NavigationBarView
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() , NavigationBarView.OnItemSelectedListener{
@@ -49,6 +50,10 @@ class MainActivity : AppCompatActivity() , NavigationBarView.OnItemSelectedListe
             }
             R.id.action_account->{
                 val userFragment= UserFragment()
+                var bundle = Bundle()
+                var uid = FirebaseAuth.getInstance().currentUser?.uid
+                bundle.putString("destinationUid",uid)
+                userFragment.arguments = bundle
                 supportFragmentManager.beginTransaction().replace(R.id.main_content,userFragment).commit()
                 return true
             }
