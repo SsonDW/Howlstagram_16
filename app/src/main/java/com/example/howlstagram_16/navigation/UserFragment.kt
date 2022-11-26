@@ -23,12 +23,16 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_main.*
 import  kotlinx.android.synthetic.main.fragment_user.view.*
 
+@Suppress("DEPRECATION")
 class UserFragment : Fragment() {
     var fragmentView : View?= null
     var firestore : FirebaseFirestore?=null
     var uid : String? = null
     var auth : FirebaseAuth? = null
     var currentUserUid : String? = null
+    companion object {
+        var PICK_PROFILE_FROM_ALBUM = 10
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container:  ViewGroup?, savedInstanceState: Bundle?): View?{
         fragmentView = LayoutInflater.from(activity).inflate(R.layout.fragment_user,container, false)
@@ -59,6 +63,12 @@ class UserFragment : Fragment() {
         }
         fragmentView?.account_reyclerview?.adapter = UserFragmentRecyclerViewAdapter()
         fragmentView?.account_reyclerview?.layoutManager = GridLayoutManager(activity, 3)
+
+        fragmentView?.account_btn_follow_signout?.setOnClickListener {
+            var photoPickerIntent = Intent(Intent.ACTION_PICK)
+            photoPickerIntent.type = "image/*"
+            activity?.startActivityForResult(photoPickerIntent,PICK_PROFILE_FROM_ALBUM)
+        }
         return fragmentView
     }
     @SuppressLint("NotifyDataSetChanged")

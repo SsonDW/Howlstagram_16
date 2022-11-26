@@ -40,7 +40,7 @@ class DetailViewFragment : Fragment() {
                     contentUidList.clear()
                     //사라지지 않음
                     if(querySnapshot == null ) return@addSnapshotListener
-                    for (snapshot in querySnapshot!!.documents) {
+                    for (snapshot in querySnapshot.documents) {
                         var item = snapshot.toObject(ContentDTO::class.java)
                         contentDTOs.add(item!!)
                         contentUidList.add(snapshot.id)
