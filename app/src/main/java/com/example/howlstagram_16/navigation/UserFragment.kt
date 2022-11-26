@@ -64,12 +64,24 @@ class UserFragment : Fragment() {
         fragmentView?.account_reyclerview?.adapter = UserFragmentRecyclerViewAdapter()
         fragmentView?.account_reyclerview?.layoutManager = GridLayoutManager(activity, 3)
 
-        fragmentView?.account_btn_follow_signout?.setOnClickListener {
+        fragmentView?.account_iv_profile?.setOnClickListener {
             var photoPickerIntent = Intent(Intent.ACTION_PICK)
             photoPickerIntent.type = "image/*"
             activity?.startActivityForResult(photoPickerIntent,PICK_PROFILE_FROM_ALBUM)
         }
+        getProfileImage()
         return fragmentView
+    }
+    fun getProfileImage(){
+        firestore?.collection("profileImage")?.document(uid!!)?.addSnapshotListener{documentSnapshot,firebaseFirestoreException ->
+            if(documentSnapshot==null) return@addSnapshotListener
+            if(documentSnapshot.data != null){
+                var url = documentSnapshot?.data!!["image"]
+                Glide.with(requireActivity()).load(url).apply(RequestOptions().circleCrop()).into(fragmentView?.account_iv_profile!!)
+
+            }
+
+        }
     }
     @SuppressLint("NotifyDataSetChanged")
     inner class UserFragmentRecyclerViewAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {

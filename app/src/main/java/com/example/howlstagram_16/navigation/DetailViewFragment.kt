@@ -93,8 +93,8 @@ class DetailViewFragment : Fragment() {
 
             //This code is when the profile image is cliked
             viewholder.detailviewitem_profile_image.setOnClickListener{
-                var fragment = UserFragment()
-                var bundle = Bundle()
+                val fragment = UserFragment()
+                val bundle = Bundle()
                 bundle.putString("destinationUid",contentDTOs[p1].uid)
                 bundle.putString("userId",contentDTOs[p1].userId)
                 fragment.arguments =bundle
@@ -103,10 +103,10 @@ class DetailViewFragment : Fragment() {
         }
 
         fun favoriteEvent(position: Int) {
-            var tsDoc = firestore?.collection("images")?.document(contentUidList[position])
+            val tsDoc = firestore?.collection("images")?.document(contentUidList[position])
             firestore?.runTransaction { transaction ->
 
-                var contentDTO = transaction.get(tsDoc!!).toObject(ContentDTO::class.java)
+                val contentDTO = transaction.get(tsDoc!!).toObject(ContentDTO::class.java)
 
                 if (contentDTO!!.favorites.containsKey(uid)) {
                     //When the button is clicked
