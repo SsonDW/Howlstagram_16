@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.howlstagram_16.R
+import com.example.howlstagram_16.navigation.model.AlarmDTO
 import com.example.howlstagram_16.navigation.model.ContentDTO
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -105,6 +106,7 @@ class DetailViewFragment : Fragment() {
                 v->
                 var intent= Intent(v.context,CommentActivity::class.java)
                 intent.putExtra("contentUid",contentUidList[p1])
+                intent.putExtra("destinationUid",contentDTOs[p1].uid)
                 startActivity(intent)
             }
         }
@@ -124,9 +126,22 @@ class DetailViewFragment : Fragment() {
                     //When the button is not clicked
                     contentDTO.favoriteCount = contentDTO.favoriteCount.plus(1)
                     contentDTO.favorites.set(uid!!, true)
+                    favoriteAlarm(contentDTOs[position].uid!!)
                 }
                 transaction.set(tsDoc, contentDTO)
             }
+
+
+        }
+        fun favoriteAlarm(destinationUid:String){
+            var alarmDTO=AlarmDTO()
+            alarmDTO.destinationUid=destinationUid
+            alarmDTO.userId=FirebaseAuth.getInstance().currentUser?.email
+            alarmDTO.uid=FirebaseAuth.getInstance().currentUser?.uid
+            alarmDTO.kind=0
+            alarmDTO.timestamp=System.currentTimeMillis()
+            FirebaseFirestore.getInstance().collection("alarms").document().set(alarmDTO)
+
 
         }
     }

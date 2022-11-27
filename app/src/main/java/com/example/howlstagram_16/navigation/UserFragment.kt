@@ -19,6 +19,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.howlstagram_16.LoginActivity
 import com.example.howlstagram_16.MainActivity
 import com.example.howlstagram_16.R
+import com.example.howlstagram_16.navigation.model.AlarmDTO
 import com.example.howlstagram_16.navigation.model.ContentDTO
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -153,11 +154,22 @@ class UserFragment : Fragment() {
                 //It add my follower when I don't follow a third person
                 followDTO!!.followerCount = followDTO!!.followerCount + 1
                 followDTO!!.followers[currentUserUid!!] = true
+                followerAlarm(uid!!)
 
             }
             transaction.set(tsDocFollower,followDTO!!)
             return@runTransaction
         }
+    }
+
+    fun followerAlarm(destinationUid:String){
+        var alarmDTO=AlarmDTO()
+        alarmDTO.destinationUid=destinationUid
+        alarmDTO.userId=auth?.currentUser?.email
+        alarmDTO.uid=auth?.currentUser?.uid
+        alarmDTO.kind=2
+        alarmDTO.timestamp=System.currentTimeMillis()
+        FirebaseFirestore.getInstance().collection("alarms").document().set(alarmDTO)
     }
 
     @SuppressLint("UseRequireInsteadOfGet")
