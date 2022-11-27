@@ -1,6 +1,7 @@
 package com.example.howlstagram_16.navigation
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -91,7 +92,7 @@ class DetailViewFragment : Fragment() {
                 viewholder.detailviewitem_favorite_imageview.setImageResource(R.drawable.ic_favorite_border)
             }
 
-            //This code is when the profile image is cliked
+            //This code is when the profile image is clicked
             viewholder.detailviewitem_profile_image.setOnClickListener{
                 val fragment = UserFragment()
                 val bundle = Bundle()
@@ -99,6 +100,12 @@ class DetailViewFragment : Fragment() {
                 bundle.putString("userId",contentDTOs[p1].userId)
                 fragment.arguments =bundle
                 activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.main_content,fragment)?.commit()
+            }
+            viewholder.detailviewitem_comment_imageview.setOnClickListener{
+                v->
+                var intent= Intent(v.context,CommentActivity::class.java)
+                intent.putExtra("contentUid",contentUidList[p1])
+                startActivity(intent)
             }
         }
 

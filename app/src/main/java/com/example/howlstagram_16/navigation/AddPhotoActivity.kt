@@ -95,7 +95,7 @@ class AddPhotoActivity : AppCompatActivity() {
 
             setResult(Activity.RESULT_OK)
 
-            finish()
+            finish() //창이 닫힌다.
         }
 
         //Callback method
