@@ -109,6 +109,7 @@ class DetailViewFragment : Fragment() {
             }
         }
 
+
         fun favoriteEvent(position: Int) {
             val tsDoc = firestore?.collection("images")?.document(contentUidList[position])
             firestore?.runTransaction { transaction ->
