@@ -91,7 +91,7 @@ class UserFragment : Fragment() {
             }
             if(followDTO?.followerCount != null){
                 fragmentView?.account_tv_follower_count?.text = followDTO.followerCount.toString()
-                if(followDTO?.followers?.containsKey(currentUserUid!!) == true){
+                if(followDTO.followers.containsKey(currentUserUid!!) == true){
                     fragmentView?.account_btn_follow_signout?.text = getString(R.string.follow_cancel)
                     fragmentView?.account_btn_follow_signout?.background
                         ?.setColorFilter(ContextCompat.getColor(activity!!,R.color.colorLightGray),
@@ -116,7 +116,7 @@ class UserFragment : Fragment() {
                 followDTO = FollowDTO()
                 followDTO.followingCount = 1
                 followDTO.followings[uid!!] = true
-
+                followerAlarm(uid!!)
                 transaction.set(tsDocFollowing, followDTO)
                 return@runTransaction
             }

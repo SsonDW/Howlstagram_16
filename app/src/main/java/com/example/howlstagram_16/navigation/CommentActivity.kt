@@ -1,5 +1,6 @@
 package com.example.howlstagram_16.navigation
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,7 +18,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_comment.*
 import kotlinx.android.synthetic.main.item_comment.view.*
 
-
 class CommentActivity : AppCompatActivity() {
     var contentUid :String?=null
     var destinationUid:String?=null
@@ -30,6 +30,7 @@ class CommentActivity : AppCompatActivity() {
 
         comment_recyclerview.adapter=CommentRecyclerviewAdapter()
         comment_recyclerview.layoutManager=LinearLayoutManager(this)
+
         comment_btn_send?.setOnClickListener{
             var comment =ContentDTO.Comment()
             comment.userId=FirebaseAuth.getInstance().currentUser?.email
@@ -54,6 +55,7 @@ class CommentActivity : AppCompatActivity() {
 
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     inner class CommentRecyclerviewAdapter:RecyclerView.Adapter<RecyclerView.ViewHolder>(){
         var comments:ArrayList<ContentDTO.Comment> = arrayListOf()
         init {
@@ -66,7 +68,7 @@ class CommentActivity : AppCompatActivity() {
                     comments.clear()
                     if(querySnapshot==null)return@addSnapshotListener
 
-                    for(snapshot in querySnapshot.documents!!){
+                    for(snapshot in querySnapshot.documents){
                         comments.add(snapshot.toObject(ContentDTO.Comment::class.java)!!)
 
 
@@ -76,15 +78,17 @@ class CommentActivity : AppCompatActivity() {
         }
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             var view =LayoutInflater.from(parent.context).inflate(R.layout.item_comment,parent,false)
-            return  CustomViewHolder(view)
+            return CustomViewHolder(view)
         }
-        private  inner class CustomViewHolder(view: View):RecyclerView.ViewHolder(view)
+
+        private inner class CustomViewHolder(view: View):RecyclerView.ViewHolder(view)
 
         override fun getItemCount():Int{
             return comments.size
         }
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-           var view =holder.itemView
+            //영상에서는 holder 대신에 p0, position 대신에 p1 사용
+            var view =holder.itemView
             view.commentviewitem_textview_comment.text=comments[position].comment
             view.commentviewitem_textview_profile.text=comments[position].userId
 

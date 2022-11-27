@@ -102,9 +102,8 @@ class DetailViewFragment : Fragment() {
                 fragment.arguments =bundle
                 activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.main_content,fragment)?.commit()
             }
-            viewholder.detailviewitem_comment_imageview.setOnClickListener{
-                v->
-                var intent= Intent(v.context,CommentActivity::class.java)
+            viewholder.detailviewitem_comment_imageview.setOnClickListener{ v->
+                var intent= Intent(v.context, CommentActivity::class.java)
                 intent.putExtra("contentUid",contentUidList[p1])
                 intent.putExtra("destinationUid",contentDTOs[p1].uid)
                 startActivity(intent)
@@ -130,9 +129,8 @@ class DetailViewFragment : Fragment() {
                 }
                 transaction.set(tsDoc, contentDTO)
             }
-
-
         }
+
         fun favoriteAlarm(destinationUid:String){
             var alarmDTO=AlarmDTO()
             alarmDTO.destinationUid=destinationUid
