@@ -1,7 +1,6 @@
 package com.example.howlstagram_16
 
 import android.Manifest
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -15,6 +14,7 @@ import com.google.android.gms.tasks.Task
 import com.google.android.material.navigation.NavigationBarView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import kotlinx.android.synthetic.main.activity_main.*
@@ -64,6 +64,20 @@ class MainActivity : AppCompatActivity() , NavigationBarView.OnItemSelectedListe
         toolbar_title_image.visibility =View.VISIBLE
     }
 
+    fun registerPushToken(){
+        FirebaseMessaging.getInstance().token.addOnCompleteListener {
+            if (!it.isSuccessful) return@addOnCompleteListener
+
+            val token = it.result
+            val uid = FirebaseAuth.getInstance().currentUser?.uid
+            val map = mutableMapOf<String, Any>()
+            map["pushToken"] = token!!
+
+            FirebaseFirestore.getInstance().collection("pushtokens").document(uid!!).set(map)
+        }
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -72,13 +86,20 @@ class MainActivity : AppCompatActivity() , NavigationBarView.OnItemSelectedListe
 
         //Set default screen
         bottom_navigation.selectedItemId=R.id.action_home
+        registerPushToken()
     }
+
+    // Test
+//    override fun onStop() {
+//        super.onStop()
+//        FcmPush.instance.sendMessage("QdvHcJR395QM9LSRM7f3VLT9klC3", "Hi", "Bye")
+//    }
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(requestCode == UserFragment.PICK_PROFILE_FROM_ALBUM && resultCode == Activity.RESULT_OK){
+        if(requestCode == UserFragment.PICK_PROFILE_FROM_ALBUM && resultCode == RESULT_OK){
             var imageUri = data?.data
             var uid = FirebaseAuth.getInstance().currentUser?.uid
             var storageRef = FirebaseStorage.getInstance().reference.child("userProfileImages").child(uid!!)

@@ -15,6 +15,7 @@ import com.example.howlstagram_16.navigation.model.AlarmDTO
 import com.example.howlstagram_16.navigation.model.ContentDTO
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.howl.howlstagram_f16.navigation.util.FcmPush
 import kotlinx.android.synthetic.main.activity_comment.*
 import kotlinx.android.synthetic.main.item_comment.view.*
 
@@ -53,6 +54,8 @@ class CommentActivity : AppCompatActivity() {
         alarmDTO.message=message
         FirebaseFirestore.getInstance().collection("alarms").document().set(alarmDTO)
 
+        var msg = FirebaseAuth.getInstance().currentUser?.email + " " + getString(R.string.alarm_comment) + " of " + message
+        FcmPush.instance.sendMessage(destinationUid, "Instagram-immmitaion", msg)
     }
 
     @SuppressLint("NotifyDataSetChanged")

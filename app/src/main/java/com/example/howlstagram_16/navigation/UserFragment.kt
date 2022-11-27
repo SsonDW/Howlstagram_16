@@ -24,6 +24,7 @@ import com.example.howlstagram_16.navigation.model.ContentDTO
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.howl.howlstagram_f16.navigation.model.FollowDTO
+import com.howl.howlstagram_f16.navigation.util.FcmPush
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_user.view.*
 
@@ -170,6 +171,9 @@ class UserFragment : Fragment() {
         alarmDTO.kind=2
         alarmDTO.timestamp=System.currentTimeMillis()
         FirebaseFirestore.getInstance().collection("alarms").document().set(alarmDTO)
+
+        var message = auth?.currentUser?.email + getString(R.string.alarm_follow)
+        FcmPush.instance.sendMessage(destinationUid, "Instagram-immmitaion", message)
     }
 
     @SuppressLint("UseRequireInsteadOfGet")
