@@ -5,17 +5,8 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       tools:context=".navigation.AddPhotoActivity">
-      <androidx.appcompat.widget.Toolbar
-          android:id="@+id/my_toolbar"
-          android:layout_width="match_parent"
-          android:layout_height="35dp">
-          <ImageView
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:src= "@drawable/logo_title"/>
-      </androidx.appcompat.widget.Toolbar>
 
-      <LinearLayout
+    <LinearLayout
           android:id="@+id/toolbar_division"
           android:background="@color/colorDivision"
           android:layout_below="@+id/my_toolbar"

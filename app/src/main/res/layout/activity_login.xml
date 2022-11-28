@@ -12,7 +12,9 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/signin_layout"
         android:layout_alignParentTop="true"
-        android:src="@drawable/logo_title" />
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
+        android:src="@drawable/insta_logo" />
 
     <LinearLayout
         android:id="@+id/signin_layout"
@@ -31,7 +33,7 @@
             <EditText
                 android:id="@+id/email_edittext"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:hint="@string/email"
                 tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -43,45 +45,23 @@
             android:layout_marginRight="20dp">
 
             <EditText
-                android:inputType="textPassword"
                 android:id="@+id/password_edittext"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:hint="@string/password"
+                android:inputType="textPassword"
                 tools:ignore="SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/email_login_button"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="50dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="15dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="35dp"
             android:text="@string/signin_email"
-            tools:ignore="TouchTargetSizeCheck" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="5dp"
-            android:background="@drawable/btn_signin_facebook"
-            android:text="@string/signin_facebook"
-            android:textColor="@color/colorWhite"
-            tools:ignore="TouchTargetSizeCheck" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="80dp"
-            android:background="@drawable/btn_signin_google"
-            android:text="@string/signin_google"
-            android:textColor="@color/colorWhite"
             tools:ignore="TouchTargetSizeCheck" />
 
     </LinearLayout>

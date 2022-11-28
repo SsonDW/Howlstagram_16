@@ -5,15 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".navigation.CommentActivity">
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/my_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="35dp">
-        <ImageView
-            android:src="@drawable/logo_title"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </androidx.appcompat.widget.Toolbar>
+
     <LinearLayout
         android:orientation="horizontal"
         android:id="@+id/toolbar_division"

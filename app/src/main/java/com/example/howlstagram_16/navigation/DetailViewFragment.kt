@@ -88,7 +88,7 @@ class DetailViewFragment : Fragment() {
             //This code is when the pasge is loaded
             if(contentDTOs[p1].favorites.containsKey(uid)) {
                 //This is like status
-                viewholder.detailviewitem_favorite_imageview.setImageResource(R.drawable.ic_favorite)
+                viewholder.detailviewitem_favorite_imageview.setImageResource(R.drawable.favorite)
             }else{
                 //This is unlike status
                 viewholder.detailviewitem_favorite_imageview.setImageResource(R.drawable.ic_favorite_border)

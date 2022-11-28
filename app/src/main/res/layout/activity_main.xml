@@ -29,11 +29,13 @@
                 android:id="@+id/toolbar_username"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"/>
+
             <ImageView
                 android:id="@+id/toolbar_title_image"
-                android:src="@drawable/logo_title"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:src="@drawable/insta_logo_title"
+                android:layout_marginLeft="300dp">
 
             </ImageView>
 
